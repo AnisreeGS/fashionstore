@@ -1,25 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import {  TextField } from '@mui/material';
+import AddProducts from './pages/AddProducts';
+import {Routes,Outlet,Route,Link} from 'react-router-dom' ;
+import AppBar from './components/Appbar';
+// import ProductsList from './pages/ProductsList';
+import BasicTable from './pages/Table';
+// import {createData,descendingComparator,getComparator,stableSort,EnhancedTableHead} from './pages/ProductTable';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App">    
+       <Routes>
+        <Route path="/" element={<AppBar/>}>
+        <Route path="/addproducts" element={<AddProducts/>}/>
+        <Route path="/productslist" element={<BasicTable/>}/>
+        </Route>
+      </Routes>  
     </div>
   );
 }
 
 export default App;
+
+
+
