@@ -18,3 +18,4 @@ export const SETIDEALFOR = 'setIdealFor';
 export const SETPRODUCTS = 'setProduct';
 export const ADDTOARRAY = 'addToArray';
 export const DELETEROW = 'deleterow';
+export const EDITROW = 'editrow';

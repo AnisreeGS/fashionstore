@@ -8,30 +8,44 @@ import {
   SETPRODUCTS,
   ADDTOARRAY,
   DELETEROW,
+  EDITROW,
   // SETSORT,
   // ADDPRODUCT
 } from "../constants/storeConstants";
 
 export default function AppReducer(state = initialState, action) {
-  const handleDelete=(arr,element)=>{
-    return arr.filter((el)=>{
-      return el !==element
-    })
-  }
-  switch (action.type) {   
+  const handleDelete = (arr, productId) => {
+    return arr.filter((el) => {
+      return el.id !== productId;
+    });
+  };
+  const handleEdit = (arr, productId) => {
+    return arr.filter((el) => {
+      if (el.id === productId) {
+        return state.product;
+      }
+    })[0];
+  };
+  switch (action.type) {
     case DELETEROW:
-        let datas = handleDelete(state.productArrayToBeDisplayed,action.payload);
-        return{
-          ...state,
-          productArrayToBeDisplayed: datas,
-        }
-      
+      let datas = handleDelete(state.productArray, action.payload);
+      return {
+        ...state,
+        productArray: datas,
+      };
+
+    case EDITROW:
+      let toedit = handleEdit(state.productArray, action.payload);
+      return {
+        ...state,
+        product: toedit,
+      };
+
     case SETBRAND:
       return {
         ...state,
         product: {
           ...state.product,
-          id: Date.now(),
           brand: action.payload,
         },
       };
@@ -75,14 +89,28 @@ export default function AppReducer(state = initialState, action) {
           idealfor: action.payload,
         },
       };
-      case ADDTOARRAY:{
+    case ADDTOARRAY: {
+      if (state.product.id) {
+        const newProductArray = state.productArray.filter((product) =>product.id!==state.product.id )
         return {
           ...state,
-          productArray:[
-            ...state.productArray,state.product],
-            product:initialState.product
-          }
+          productArray: [
+            ...newProductArray,
+            { ...state.product },
+          ],
+          product: initialState.product,
+        };
+      } else {
+        return {
+          ...state,
+          productArray: [
+            ...state.productArray,
+            { ...state.product, id: Date.now() },
+          ],
+          product: initialState.product,
+        };
       }
+    }
     default:
       return state;
     // case ADDPRODUCT:

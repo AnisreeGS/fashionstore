@@ -1,4 +1,4 @@
-import {SETBRAND,SETDRESSTYPE,SETPRICE,SETQUANTITY,SETIDEALFOR,SETPRODUCTS,ADDTOARRAY,DELETEROW} from "../../constants/storeConstants"
+import {SETBRAND,SETDRESSTYPE,SETPRICE,SETQUANTITY,SETIDEALFOR,SETPRODUCTS,ADDTOARRAY,DELETEROW,EDITROW} from "../../constants/storeConstants"
 
  export const updatebrand = (payload) =>{
      return{type:SETBRAND,payload}

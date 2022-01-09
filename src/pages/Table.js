@@ -12,29 +12,33 @@ import sortPrice from "../utils/Sort";
 import Checkbox from "@mui/material/Checkbox";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { DELETEROW } from "../constants/storeConstants";
+import { DELETEROW,EDITROW } from "../constants/storeConstants";
+import {Link} from "react-router-dom"
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 export default function BasicTable() {
-  const productArrayToBeDisplayed = useSelector((state) => state.productArray);
-  const [data, setdata] = useState(productArrayToBeDisplayed);
-  const dispatch = useDispatch()
-  const sortPrice = () => {
-    const a = [...productArrayToBeDisplayed];
-    console.log(a);
-    setdata(a.sort((a, b) => (a.price > b.price ? 1 : -1)));
-  };
-  console.log(data);
+  const productArray = useSelector((state) => state.productArray);
+  const dispatch = useDispatch();
+  const [sort, setSort] = useState('');
 
-  const sortPriceHighToLow = () => {
-    const high = [...productArrayToBeDisplayed];
-    setdata(high.sort((a, b) => (a.price < b.price ? 1 : -1)));
-  };
+  const getSortedDataDesc = () => {
+    return [...productArray].sort((a, b) => (a.price < b.price ? 1 : -1));
+  }
+
+  const getSortedDataAsc = () => {
+    return [...productArray].sort((a, b) => (a.price > b.price ? 1 : -1));
+  }
+
+  const getList = () => {
+    if(sort === 'Asc') return getSortedDataAsc();
+    else if (sort === 'Desc') return getSortedDataDesc();
+    else return [...productArray];
+  }
 
   
   // const removeSelectedRow = (arr,ele)=>{
-  //   const selectedRow =[...productArrayToBeDisplayed]
+  //   const selectedRow =[...productArray]
   //     if(arr.selectable===true){
   //       return arr.filter((el)=>{
   //         return el !== ele
@@ -44,15 +48,16 @@ export default function BasicTable() {
 
 
 
-  const handleEdit = ()=>{
+  // const handleEdit = ()=>{
+
     
-  }
+  // }
 
 
   return (
     <>
-      <button  onClick={sortPrice}>Price Low - High</button>
-      <button onClick={sortPriceHighToLow}> Price High - Low</button>
+      <button  onClick={() => setSort('Asc')}>Price Low - High</button>
+      <button onClick={() => setSort('Desc')}> Price High - Low</button>
       {/* <button onClick={removeSelectedRow}> Delete </button> */}
 
       <TableContainer component={Paper}>
@@ -66,10 +71,13 @@ export default function BasicTable() {
               <TableCell align="right">Price&nbsp;</TableCell>
               <TableCell align="right">Quantity&nbsp;</TableCell>
               <TableCell align="right">Ideal For&nbsp;</TableCell>
+              <TableCell align="right">Edit&nbsp;</TableCell>
+              <TableCell align="right">Delete&nbsp;</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {getList().map((row) => (
+              // <EditRow product={product}/>
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -81,8 +89,8 @@ export default function BasicTable() {
                 <TableCell align="right">{row.price}</TableCell>
                 <TableCell align="right">{row.quantity}</TableCell>
                 <TableCell align="right">{row.idealfor}</TableCell>
-                <TableCell align="right"><button onClick={()=>handleEdit}><EditIcon/></button></TableCell>
-                <TableCell align="right"><button onClick={()=>dispatch({type:DELETEROW,payload:""})}><DeleteIcon/></button></TableCell>
+                <TableCell align="right"><button onClick={()=>dispatch({type:EDITROW,payload:row.id})}><Link to="/addproducts"><EditIcon/></Link></button></TableCell>
+                <TableCell align="right"><button onClick={()=>dispatch({type:DELETEROW,payload:row.id})}><DeleteIcon/></button></TableCell>
               </TableRow>
             ))}
           </TableBody>
